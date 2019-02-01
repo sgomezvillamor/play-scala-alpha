@@ -1,9 +1,11 @@
 package controllers
 
 import javax.inject._
+import play.api.Logger
 import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import services.{JobFair, ProjectMatching}
 
 import scala.util.{Failure, Success, Try}
 
@@ -12,7 +14,6 @@ case class JobFairPayload(engineersPreferences: Map[String, Seq[String]],
                           projectsCapacities: Map[String, Int])
 
 
-case class ProjectMatching(project: String, engineer: String)
 
 case class JobFairResult(matches: Seq[ProjectMatching])
 
@@ -21,18 +22,24 @@ case class JobFairResult(matches: Seq[ProjectMatching])
   * JobFair application.
   */
 @Singleton
-class JobFairController @Inject() extends Controller {
+class JobFairController @Inject() (jobFair: JobFair) extends Controller {
 
   def jobfair = Action { implicit request =>
     val jobFairPayload = Json.fromJson[JobFairPayload](request.body.asJson.get).get
 
-    println(jobFairPayload)
+    Logger.info(s"JobFairController: Request ${jobFairPayload}.")
 
     Try {
-      JobFairResult(Seq(
-        ProjectMatching("proj1", "engA"),
-        ProjectMatching("proj2", "engX")
-      ))
+
+      val matches = jobFair.matches(jobFairPayload.engineersPreferences,
+        jobFairPayload.projectsPreferences, jobFairPayload.projectsCapacities)
+
+      val jobFairResult = JobFairResult(matches)
+
+      Logger.info(s"JobFairController: Response ${jobFairResult}")
+
+      jobFairResult
+
     } match {
       case Success(res) => Ok(Json.toJson(res))
       case Failure(ex) => InternalServerError(Json.toJson(
