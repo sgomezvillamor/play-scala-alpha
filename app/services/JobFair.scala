@@ -1,5 +1,7 @@
 package services
 
+import java.util.Random
+
 import javax.inject._
 import play.api.Logger
 
@@ -13,6 +15,8 @@ trait JobFair {
 
 @Singleton
 class BasicJobFair extends JobFair {
+  val rnd = new Random(System.currentTimeMillis())
+
   override def matches(engineersPreferences: Map[String, Seq[String]],
     projectsPreferences: Map[String, Seq[String]],
     projectsCapacities: Map[String, Int]): Seq[ProjectMatching] = {
@@ -27,8 +31,8 @@ class BasicJobFair extends JobFair {
     // TODO: do logic
 
     Seq(
-      ProjectMatching("proj1", "engA"),
-      ProjectMatching("proj2", "engX")
+      ProjectMatching("proj1", s"engA ${rnd.nextInt()}"),
+      ProjectMatching("proj2", s"engA ${rnd.nextInt()}")
     )
   }
 }
