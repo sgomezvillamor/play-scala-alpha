@@ -17,3 +17,7 @@ Note I'm working on brach 2.5.x: https://github.com/sgomezvillamor/play-scala-al
   
 - Friday, about 15mins to:
   - remove some unnecessary code from play-scala-starter
+  
+- Saturday, about 45mins to:
+  - clean dependencies in build.sbt and set up unit tests
+  - first basic implementation for JobFair service 
