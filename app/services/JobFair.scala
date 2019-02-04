@@ -24,36 +24,34 @@ class BasicJobFair extends JobFair {
                        projectsCapacities: Map[String, Int]): Seq[ProjectMatching] = {
 
     Logger.info(
-      s""" JobFair
+      s""" BasicJobFair
          | Engineer preferences: ${engineersPreferences}
          | Projects preferences: ${projectsPreferences}
          | Projects capacities: ${projectsCapacities}
          |""".stripMargin)
 
-    // TODO: do logic
-
-    var projectsPrefs = collection.mutable.Map[String, Seq[String]]().withDefaultValue(Seq.empty[String])
+    var matches = collection.mutable.Map[String, Seq[String]]().withDefaultValue(Seq.empty[String])
 
     engineersPreferences.foreach { case (e, prefs) =>
-      println(s"engineer $e with prefs $prefs")
+      Logger.debug(s"engineer $e with prefs $prefs")
       val loop = new Breaks
       import loop.{breakable, break}
       breakable {
         prefs.foreach { pref =>
-          println(s"pref $pref: projectsPrefs(pref)= ${projectsPrefs(pref)} and projectsCapacities(pref)=${projectsCapacities(pref)}")
-          if (projectsPrefs(pref).size < projectsCapacities(pref)
+          Logger.debug(s"pref $pref: projectsPrefs(pref)= ${matches(pref)} and projectsCapacities(pref)=${projectsCapacities(pref)}")
+          if (matches(pref).size < projectsCapacities(pref)
             && projectsPreferences(pref).contains(e)) {
-            projectsPrefs(pref) = (projectsPrefs(pref) :+ e)
-            println(s"projectsPrefs(pref) append e= ${projectsPrefs(pref)}")
+            matches(pref) = (matches(pref) :+ e)
+            Logger.debug(s"projectsPrefs(pref) append $e = ${matches(pref)}")
             break()
           }
         }
       }
     }
 
-    println(projectsPrefs)
+    Logger.info(s"BasicJobFair: matches = $matches")
 
-    projectsPrefs.flatMap { case (proj, prefs) =>
+    matches.flatMap { case (proj, prefs) =>
       prefs.map(ProjectMatching(proj, _))
     }.toSeq
   }
