@@ -13,6 +13,17 @@ Note I'm working on brach 2.5.x: https://github.com/sgomezvillamor/play-scala-al
   - cons: order of engineers impacts on the resulting matches
   - mitigation: since the order is important, can we rank engineers? according to qualifications, 
   years in the company, ...?
+- State of the art: matching markets
+  - Matching markets is a research topic in economy, different from commodity markets, where
+  prices manage the market
+  - According to challenge requirements, this is a many-to-one matching market problem
+    - One-to-one: marriage
+    - Many-to-one: employment (eg. firms and consultants: a firm employees many consultants but a 
+     consultant just works for one firm)
+    - Many-to-many: employment when the employee can work for multiple firms at the same time
+  - Although there is a significant amount of work done, this seems still an active research topic.
+  - I haven't found a public implementation for the many-to-one problem yet
+  - Deeper research is required
 
 # Activity log
 
@@ -30,3 +41,6 @@ Note I'm working on brach 2.5.x: https://github.com/sgomezvillamor/play-scala-al
   
 - Monday, about 30mins to:
   - Analysis of `BasicJobFair` (see above in design considerations) and add more tests
+  
+- Monday night, about 1h to:
+  - Review state of the art on matching markets (see above in design considerations)
